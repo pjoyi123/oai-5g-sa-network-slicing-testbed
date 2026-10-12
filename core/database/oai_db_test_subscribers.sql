@@ -318,8 +318,8 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
--- Example subscriber records for three 5G network slices
--- Example subscriber provisioning for OAI 5G SA.
+-- Test subscriber records for three 5G network slices
+-- Test subscriber provisioning for OAI 5G SA.
 
 -- TEST-ONLY credentials; not suitable for production.
 

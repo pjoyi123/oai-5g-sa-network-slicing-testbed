@@ -49,7 +49,7 @@ These profiles were evaluated one at a time. The labels do not imply verified se
 ## Directory structure
 
 - `configs/`: placeholders for sanitized gNB, UE and core configuration files
-- `scripts/`: example commands and summary script
+- `scripts/`: Network performance measurement scripts
 - `results/`: manuscript-level aggregate results; raw per-run data still needed
 - `docs/`: replication checklist and reviewer response
 
