@@ -1,0 +1,4 @@
+profile,icmp_sent,icmp_received,icmp_loss_percent,udp_loss_percent,tcp_retransmissions_total
+eMBB,500,500,0,0,492
+URLLC,500,500,0,0,90
+mMTC,500,500,0,0,162

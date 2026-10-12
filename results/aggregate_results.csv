@@ -1,0 +1,4 @@
+profile,rtt_mean_ms,rtt_sd_ms,tcp_throughput_mean_mbps,tcp_throughput_sd_mbps,udp_jitter_mean_ms,udp_jitter_sd_ms,runs
+eMBB,20.9338,5.602,24.617,2.156,1.569,0.245,5
+URLLC,15.7762,0.216,27.642,5.499,2.010,0.550,5
+mMTC,20.0682,1.269,27.053,2.512,1.517,0.165,5

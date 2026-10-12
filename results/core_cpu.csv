@@ -1,0 +1,4 @@
+function,baseline_mean_cpu_percent,active_embb_mean_cpu_percent
+AMF,1.53,1.93
+SMF,2.19,1.21
+UPF,0.91,9.21
