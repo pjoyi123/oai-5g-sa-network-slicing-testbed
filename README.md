@@ -50,17 +50,84 @@ These profiles were evaluated one at a time. The labels do not imply verified se
 
 - `configs/`: placeholders for sanitized gNB, UE and core configuration files
 - `scripts/`: Network performance measurement scripts
-- `results/`: manuscript-level aggregate results; raw per-run data still needed
+- `results/`: aggregate statistics, 45 original measurement files and generated performance figures
 - `docs/`: replication checklist and reviewer response
 
 ## Manuscript results
 
-See `results/aggregate_results.csv`, `results/packet_delivery.csv` and `results/core_cpu.csv`. These values were transcribed from the manuscript; they are **not raw measurements**.
+See `results/aggregate_results.csv`, `results/packet_delivery.csv` and `results/core_cpu.csv`. The RTT, TCP throughput and UDP jitter statistics in `results/aggregate_results.csv` have been reproduced from the original measurements in `results/raw/`. The CPU utilisation, packet delivery and retransmission results require separate verification.
 
 ## Reproducibility status
 
-This is a **documentation starter**, not a complete reproducibility release. Before public release, add actual validated configuration files, raw per-run measurements, exact software versions, execution commands and a license approved by your organisation. Remove IMSIs, subscriber keys, credentials, internal addresses, private endpoints and proprietary material as appropriate.
+The repository includes 45 original experimental measurement files, a Python analysis script and generated performance figures. The RTT, TCP throughput and UDP jitter statistics have been reproduced successfully from the original measurements.
+
+Full testbed reproducibility remains incomplete. The exact OAI Core image versions, validated configurations, launch commands, network endpoints and run procedures still require documentation. CPU utilisation, packet delivery and retransmission results also require separate verification.
+
+Before public release, review the repository for sensitive information, obtain the necessary organisational approval and add an approved software license.
 
 ## Citation
 
 Joyi, P., Keetile, M., and Masonta, M. T., “Implementation and Experimental Evaluation of End-to-End 5G Standalone Network Slicing Using OpenAir-Interface,” IMITEC 2026 (accepted; publication details to be confirmed).
+
+## Reproducing the experimental results
+
+This repository contains 45 original experimental measurement files collected
+from three S-NSSAI configurations: eMBB, URLLC and mMTC.
+
+Each configuration was evaluated using five experimental runs.
+
+### Python requirements
+
+The analysis requires:
+
+- Python 3
+- NumPy
+- Matplotlib
+
+Install the required Python libraries:
+
+```bash
+python3 -m pip install numpy matplotlib
+```
+
+### Generate the experimental figures
+
+From the root directory of the repository, execute:
+
+```bash
+python3 scripts/generate_figures.py
+```
+
+The script reads the original experimental measurements from `results/raw/`.
+
+It calculates the mean and sample standard deviation for:
+
+- ICMP round-trip time (RTT)
+- TCP throughput
+- UDP jitter
+
+### Generated figures
+
+The figures are automatically saved in `results/figures/`.
+
+The generated files include:
+
+- `latency_comparison.png` and `latency_comparison.pdf`
+- `throughput_comparison.png` and `throughput_comparison.pdf`
+- `jitter_comparison.png` and `jitter_comparison.pdf`
+
+### Original experimental measurements
+
+The original measurements are organised as follows:
+
+- `results/raw/latency/`: 15 ICMP measurement files
+- `results/raw/throughput/`: 15 TCP iPerf3 JSON files
+- `results/raw/jitter/`: 15 UDP iPerf3 JSON files
+
+The Python analysis script has been successfully tested against these
+measurements and reproduces the RTT, TCP throughput and UDP jitter
+statistics reported in `results/aggregate_results.csv` to the stated precision.
+
+CPU utilisation, packet delivery and retransmission results require
+separate verification. Full testbed reproduction also requires additional
+configuration and execution details.
