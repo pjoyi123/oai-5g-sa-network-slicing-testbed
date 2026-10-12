@@ -5,3 +5,12 @@
 raw/
 __pycache__/
 .DS_Store
+
+# Local OAI Core credentials and runtime configuration
+.env
+.env.*
+!.env.example
+**/config.runtime.yaml
+**/config.example.before-*.yaml
+**/docker-compose.example.before-*.yaml
+**/*.sql.backup

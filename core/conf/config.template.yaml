@@ -1,0 +1,268 @@
+log_level:
+  general: debug
+register_nf:
+  general: true
+http_version: 2
+nfs:
+  amf:
+    host: oai-amf
+    sbi:
+      port: 8080
+      api_version: v1
+      interface_name: eth0
+    n2:
+      interface_name: eth0
+      port: 38412
+  smf:
+    host: oai-smf
+    sbi:
+      port: 8080
+      api_version: v1
+      interface_name: eth0
+    n4:
+      interface_name: eth0
+      port: 8805
+  upf:
+    host: oai-upf
+    sbi:
+      port: 8080
+      api_version: v1
+      interface_name: eth0
+    n3:
+      interface_name: eth0
+      port: 2152
+    n4:
+      interface_name: eth0
+      port: 8805
+    n6:
+      interface_name: eth0
+    n9:
+      interface_name: eth0
+      port: 2152
+  udm:
+    host: oai-udm
+    sbi:
+      port: 8080
+      api_version: v1
+      interface_name: eth0
+  udr:
+    host: oai-udr
+    sbi:
+      port: 8080
+      api_version: v1
+      interface_name: eth0
+  ausf:
+    host: oai-ausf
+    sbi:
+      port: 8080
+      api_version: v1
+      interface_name: eth0
+  nrf:
+    host: oai-nrf
+    sbi:
+      port: 8080
+      api_version: v1
+      interface_name: eth0
+database:
+  host: 172.28.10.2
+  user: test
+  type: mysql
+  password: __MYSQL_PASSWORD__
+  database_name: oai_db
+  generate_random: true
+  connection_timeout: 300
+snssais:
+- &id001
+  sst: 1
+  sd: '010203'
+- &id002
+  sst: 2
+  sd: '112233'
+- &id003
+  sst: 3
+  sd: '445566'
+amf:
+  pid_directory: /var/run
+  amf_name: OAI-AMF
+  support_features_options:
+    enable_simple_scenario: false
+    enable_nssf: false
+    enable_smf_selection: true
+    use_external_udm: false
+  relative_capacity: 30
+  statistics_timer_interval: 20
+  emergency_support: false
+  served_guami_list:
+  - mcc: 1
+    mnc: 1
+    amf_region_id: 1
+    amf_set_id: 1
+    amf_pointer: 1
+  plmn_support_list:
+  - mcc: 1
+    mnc: 1
+    tac: 1
+    nssai:
+    - *id001
+    - *id002
+    - *id003
+  supported_integrity_algorithms:
+  - NIA1
+  - NIA2
+  supported_encryption_algorithms:
+  - NEA0
+  - NEA1
+  - NEA2
+smf:
+  ue_mtu: 1500
+  support_features:
+    use_local_subscription_info: true
+    use_local_pcc_rules: true
+  upfs:
+  - host: oai-upf
+    config:
+      enable_usage_reporting: false
+  ue_dns:
+    primary_ipv4: 1.1.1.1
+    primary_ipv6: 2001:4860:4860::8888
+    secondary_ipv4: 8.8.8.8
+    secondary_ipv6: 2001:4860:4860::8888
+  ims:
+    pcscf_ipv4: 172.28.10.3
+    pcscf_ipv6: fe80::7915:f408:1787:db8b
+  smf_info:
+    sNssaiSmfInfoList:
+    - sNssai: *id001
+      dnnSmfInfoList:
+      - dnn: oai
+      - dnn: openairinterface
+      - dnn: ims
+      - dnn: default
+    - sNssai: *id002
+      dnnSmfInfoList:
+      - dnn: oai
+      - dnn: openairinterface
+      - dnn: ims
+      - dnn: default
+    - sNssai: *id003
+      dnnSmfInfoList:
+      - dnn: oai
+      - dnn: openairinterface
+      - dnn: ims
+      - dnn: default
+local_subscription_infos:
+- single_nssai: *id001
+  dnn: oai
+  qos_profile:
+    5qi: 9
+    session_ambr_ul: 10Gbps
+    session_ambr_dl: 10Gbps
+- single_nssai: *id001
+  dnn: openairinterface
+  qos_profile:
+    5qi: 9
+    session_ambr_ul: 10Gbps
+    session_ambr_dl: 10Gbps
+- single_nssai: *id001
+  dnn: ims
+  qos_profile:
+    5qi: 9
+    session_ambr_ul: 10Gbps
+    session_ambr_dl: 10Gbps
+- single_nssai: *id001
+  dnn: default
+  qos_profile:
+    5qi: 9
+    session_ambr_ul: 10Gbps
+    session_ambr_dl: 10Gbps
+- single_nssai: *id002
+  dnn: oai
+  qos_profile:
+    5qi: 9
+    session_ambr_ul: 10Gbps
+    session_ambr_dl: 10Gbps
+- single_nssai: *id002
+  dnn: openairinterface
+  qos_profile:
+    5qi: 9
+    session_ambr_ul: 10Gbps
+    session_ambr_dl: 10Gbps
+- single_nssai: *id002
+  dnn: ims
+  qos_profile:
+    5qi: 9
+    session_ambr_ul: 10Gbps
+    session_ambr_dl: 10Gbps
+- single_nssai: *id002
+  dnn: default
+  qos_profile:
+    5qi: 9
+    session_ambr_ul: 10Gbps
+    session_ambr_dl: 10Gbps
+- single_nssai: *id003
+  dnn: oai
+  qos_profile:
+    5qi: 9
+    session_ambr_ul: 10Gbps
+    session_ambr_dl: 10Gbps
+- single_nssai: *id003
+  dnn: openairinterface
+  qos_profile:
+    5qi: 9
+    session_ambr_ul: 10Gbps
+    session_ambr_dl: 10Gbps
+- single_nssai: *id003
+  dnn: ims
+  qos_profile:
+    5qi: 9
+    session_ambr_ul: 10Gbps
+    session_ambr_dl: 10Gbps
+- single_nssai: *id003
+  dnn: default
+  qos_profile:
+    5qi: 9
+    session_ambr_ul: 10Gbps
+    session_ambr_dl: 10Gbps
+upf:
+  support_features:
+    enable_bpf_datapath: false
+    enable_snat: true
+  remote_n6_gw: 127.0.0.1
+  smfs:
+  - host: oai-smf
+  upf_info:
+    sNssaiUpfInfoList:
+    - sNssai: *id001
+      dnnUpfInfoList:
+      - dnn: oai
+      - dnn: openairinterface
+      - dnn: ims
+      - dnn: default
+    - sNssai: *id002
+      dnnUpfInfoList:
+      - dnn: oai
+      - dnn: openairinterface
+      - dnn: ims
+      - dnn: default
+    - sNssai: *id003
+      dnnUpfInfoList:
+      - dnn: oai
+      - dnn: openairinterface
+      - dnn: ims
+      - dnn: default
+dnns:
+- dnn: oai
+  pdu_session_type: IPV4
+  ipv4_subnet: 10.0.0.0/24
+- dnn: openairinterface
+  pdu_session_type: IPV4V6
+  ipv4_subnet: 10.0.1.0/24
+  ipv6_prefix: 2001:1:2::/64
+- dnn: ims
+  pdu_session_type: IPV4V6
+  ipv4_subnet: 10.0.9.0/24
+  ipv6_prefix: 2001:1:2::/64
+- dnn: default
+  pdu_session_type: IPV4V6
+  ipv4_subnet: 10.0.255.0/24
+  ipv6_prefix: 2001:1:2::/64

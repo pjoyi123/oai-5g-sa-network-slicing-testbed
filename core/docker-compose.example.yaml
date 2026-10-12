@@ -1,0 +1,165 @@
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:8.0
+    volumes:
+    - ./database/oai_db_complete_example.sql:/docker-entrypoint-initdb.d/oai_db.sql
+    - ./healthscripts/mysql-healthcheck.sh:/tmp/mysql-healthcheck.sh
+    environment:
+    - TZ=Europe/Paris
+    - MYSQL_DATABASE=oai_db
+    - MYSQL_USER=test
+    - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    healthcheck:
+      test: /bin/bash -c "/tmp/mysql-healthcheck.sh"
+      interval: 5s
+      timeout: 2s
+      retries: 10
+    networks:
+      public_net:
+        ipv4_address: 172.28.10.2
+  oai-udr:
+    container_name: oai-udr
+    image: oaisoftwarealliance/oai-udr:develop
+    expose:
+    - 80/tcp
+    - 8080/tcp
+    volumes:
+    - ./conf/config.runtime.yaml:/openair-udr/etc/config.yaml
+    environment:
+    - TZ=Europe/Paris
+    depends_on:
+    - mysql
+    - oai-nrf
+    networks:
+      public_net:
+        ipv4_address: 172.28.10.4
+  oai-udm:
+    container_name: oai-udm
+    image: oaisoftwarealliance/oai-udm:develop
+    expose:
+    - 80/tcp
+    - 8080/tcp
+    volumes:
+    - ./conf/config.runtime.yaml:/openair-udm/etc/config.yaml
+    environment:
+    - TZ=Europe/Paris
+    depends_on:
+    - oai-udr
+    networks:
+      public_net:
+        ipv4_address: 172.28.10.5
+  oai-ausf:
+    container_name: oai-ausf
+    image: oaisoftwarealliance/oai-ausf:develop
+    expose:
+    - 80/tcp
+    - 8080/tcp
+    volumes:
+    - ./conf/config.runtime.yaml:/openair-ausf/etc/config.yaml
+    environment:
+    - TZ=Europe/Paris
+    depends_on:
+    - oai-udm
+    networks:
+      public_net:
+        ipv4_address: 172.28.10.6
+  oai-nrf:
+    container_name: oai-nrf
+    image: oaisoftwarealliance/oai-nrf:develop
+    expose:
+    - 80/tcp
+    - 8080/tcp
+    volumes:
+    - ./conf/config.runtime.yaml:/openair-nrf/etc/config.yaml
+    environment:
+    - TZ=Europe/Paris
+    networks:
+      public_net:
+        ipv4_address: 172.28.10.7
+  oai-amf:
+    container_name: oai-amf
+    image: oaisoftwarealliance/oai-amf:develop
+    expose:
+    - 80/tcp
+    - 8080/tcp
+    - 38412/sctp
+    volumes:
+    - ./conf/config.runtime.yaml:/openair-amf/etc/config.yaml
+    environment:
+    - TZ=Europe/Paris
+    depends_on:
+    - mysql
+    - oai-nrf
+    - oai-ausf
+    networks:
+      public_net:
+        ipv4_address: 172.28.10.8
+  oai-smf:
+    container_name: oai-smf
+    image: oaisoftwarealliance/oai-smf:develop
+    expose:
+    - 80/tcp
+    - 8080/tcp
+    - 8805/udp
+    volumes:
+    - ./conf/config.runtime.yaml:/openair-smf/etc/config.yaml
+    environment:
+    - TZ=Europe/Paris
+    depends_on:
+    - oai-nrf
+    - oai-amf
+    networks:
+      public_net:
+        ipv4_address: 172.28.10.9
+  oai-upf:
+    container_name: oai-upf
+    image: oaisoftwarealliance/oai-upf:develop
+    expose:
+    - 2152/udp
+    - 8805/udp
+    volumes:
+    - ./conf/config.runtime.yaml:/openair-upf/etc/config.yaml
+    environment:
+    - TZ=Europe/Paris
+    depends_on:
+    - oai-nrf
+    - oai-smf
+    cap_add:
+    - NET_ADMIN
+    - SYS_ADMIN
+    cap_drop:
+    - ALL
+    privileged: true
+    networks:
+      public_net:
+        ipv4_address: 172.28.10.10
+  oai-ext-dn:
+    privileged: true
+    init: true
+    container_name: oai-ext-dn
+    image: oaisoftwarealliance/trf-gen-cn5g:jammy
+    entrypoint: /bin/bash -c \ "ip route add 10.0.0.0/16 via 172.28.10.10 dev eth0;
+      ip route; sleep infinity"
+    command:
+    - /bin/bash
+    - -c
+    - 'trap : SIGTERM SIGINT; sleep infinity & wait'
+    healthcheck:
+      test: /bin/bash -c "ip r | grep 10.0.0"
+      interval: 5s
+      timeout: 2s
+      retries: 10
+    networks:
+      public_net:
+        ipv4_address: 172.28.10.11
+networks:
+  public_net:
+    driver: bridge
+    name: oai-cn5g-public-net
+    ipam:
+      config:
+      - subnet: 172.28.10.0/26
+    driver_opts:
+      com.docker.network.bridge.name: oai-cn5g
