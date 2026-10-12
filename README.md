@@ -123,6 +123,8 @@ The original measurements are organised as follows:
 - `results/raw/latency/`: 15 ICMP measurement files
 - `results/raw/throughput/`: 15 TCP iPerf3 JSON files
 - `results/raw/jitter/`: 15 UDP iPerf3 JSON files
+- `results/raw/resources/docker_baseline_raw.csv`: 300 baseline Docker resource observations
+- `results/raw/resources/docker_embb_traffic_raw.csv`: 300 Docker resource observations during active eMBB traffic
 
 The Python analysis script has been successfully tested against these
 measurements and reproduces the RTT, TCP throughput and UDP jitter
