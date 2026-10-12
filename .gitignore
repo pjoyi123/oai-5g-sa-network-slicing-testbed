@@ -14,3 +14,9 @@ __pycache__/
 **/config.example.before-*.yaml
 **/docker-compose.example.before-*.yaml
 **/*.sql.backup
+
+# Allow reproducibility measurements
+!results/raw/
+!results/raw/latency/
+!results/raw/throughput/
+!results/raw/jitter/
