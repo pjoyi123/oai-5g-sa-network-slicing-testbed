@@ -15,7 +15,7 @@ The experiment evaluates **three S-NSSAI configurations sequentially**, represen
 | RAM | Approximately 15 GiB |
 | OAI RAN branch | `2025.w46` |
 | OAI RAN commit | `92980ceb` |
-| OAI Core version/images | **TODO: record exact Docker image tags/digests** |
+| OAI Core version/images | Current deployment image IDs recorded in `docs/docker_image_versions.csv`; original experimental image versions not independently confirmed |
 | RAN | OAI gNB and NR UE over RFsim |
 | Band | NR n78 |
 | PRBs | 106 |
@@ -37,33 +37,61 @@ These profiles were evaluated one at a time. The labels do not imply verified se
 
 ## Experimental procedure
 
-1. Deploy the recorded OAI 5G Core, gNB and UE configuration (actual sanitized configuration files must be supplied in `configs/`).
+1. Deploy the recorded OAI 5G Core, gNB and UE configuration (sanitized configurations are provided in `configs/` and `core/`).
 2. Activate one S-NSSAI profile and verify UE registration, PDU session establishment and IP connectivity using core logs and ICMP.
 3. Conduct **five measurement runs per profile**: 100 ICMP echo requests per run; iPerf3 TCP and UDP tests lasting 20 seconds each; UDP offered load 10 Mbps.
 4. Record RTT, TCP throughput, UDP jitter, ICMP/UDP loss and TCP retransmissions.
 5. Monitor AMF, SMF and UPF with Docker statistics, 30 observations for baseline and active eMBB conditions.
 6. Calculate mean and sample standard deviation across five runs for RTT, TCP throughput and UDP jitter.
 
-**TODO:** Document exact UE launch commands, IP endpoints, iperf3 server location, run reset procedure, traffic direction, measurement sampling intervals, and container image versions. Do not claim bit-for-bit reproducibility until these details and original configurations are supplied.
+**Remaining limitations:** The exact UE launch variant used for the final measurements, per-run restart procedure, original Docker statistics sampling interval, and original OAI Core image versions remain unconfirmed. Recovered commands, sanitized configurations, traffic endpoints and current Docker image IDs are documented. Complete testbed reproducibility has not yet been demonstrated.
 
 ## Directory structure
 
-- `configs/`: placeholders for sanitized gNB, UE and core configuration files
+- `configs/`: sanitized gNB and UE configurations with launch instructions; see `core/` for the OAI Core configuration
 - `scripts/`: Network performance measurement scripts
 - `results/`: aggregate statistics, 45 original measurement files and generated performance figures
 - `docs/`: replication checklist and reviewer response
 
 ## Manuscript results
 
-See `results/aggregate_results.csv`, `results/packet_delivery.csv` and `results/core_cpu.csv`. The RTT, TCP throughput and UDP jitter statistics in `results/aggregate_results.csv` have been reproduced from the original measurements in `results/raw/`. The CPU utilisation, packet delivery and retransmission results require separate verification.
+See `results/aggregate_results.csv`, `results/packet_delivery.csv` and `results/core_cpu.csv`. The RTT, TCP throughput and UDP jitter statistics in `results/aggregate_results.csv` have been reproduced from the original measurements in `results/raw/`. AMF, SMF and UPF CPU averages and ICMP/UDP packet delivery have been independently verified against the preserved measurements. TCP retransmission totals were recalculated, but they differ from the manuscript values.
 
 ## Reproducibility status
 
 The repository includes 45 original experimental measurement files, a Python analysis script and generated performance figures. The RTT, TCP throughput and UDP jitter statistics have been reproduced successfully from the original measurements.
 
-Full testbed reproducibility remains incomplete. The exact OAI Core image versions, validated configurations, launch commands, network endpoints and run procedures still require documentation. CPU utilisation, packet delivery and retransmission results also require separate verification.
+Full testbed reproducibility remains incomplete. Sanitized configurations, recovered launch commands, network endpoints and current Docker image IDs are documented. The exact original Core image versions, final UE launch variant and per-run restart procedure remain unconfirmed. CPU averages and packet delivery have been verified; the TCP retransmission discrepancy remains unresolved.
 
 Before public release, review the repository for sensitive information, obtain the necessary organisational approval and add an approved software license.
+
+## Verified traffic-generation parameters
+
+The following parameters were recovered directly from all 30 original iPerf3 JSON measurement files.
+
+| Parameter | TCP throughput | UDP jitter |
+|---|---|---|
+| Client IP | 10.0.0.2 | 10.0.0.2 |
+| Server IP | 192.168.70.135 | 192.168.70.135 |
+| Server port | 5201 | 5201 |
+| Duration | 20 seconds | 20 seconds |
+| Target bitrate | TCP default | 10 Mbps |
+| Reverse mode | Disabled | Disabled |
+| Runs per slice | 5 | 5 |
+
+Traffic originated from the UE-side client and was directed toward the iPerf3 server. The same settings were recorded for eMBB, URLLC and mMTC.
+
+The server IP is the original experimental address and must be replaced with the appropriate reachable server address in another deployment. The server address matches the current `oai-ext-dn` container, and recovered Bash history shows an iPerf3 server launch inside that container. However, the server process location during every original measurement remains unconfirmed.
+
+## Network profile switching and process management
+
+The eMBB, URLLC and mMTC profiles were evaluated sequentially using separate UE configurations.
+
+Recovered Bash history confirms that OAI NR UE processes were stopped and relaunched during some experimental sessions. It also records multiple gNB launches and OAI Core deployment using Docker Compose.
+
+The available records do not establish whether the gNB, UE or Core was restarted between every measurement run. Therefore, no fixed restart sequence is claimed for the original experiments.
+
+For replication, researchers should activate the required UE profile, verify registration and PDU session establishment, confirm IP connectivity, and then execute the corresponding measurements.
 
 ## Citation
 
@@ -130,6 +158,91 @@ The Python analysis script has been successfully tested against these
 measurements and reproduces the RTT, TCP throughput and UDP jitter
 statistics reported in `results/aggregate_results.csv` to the stated precision.
 
-CPU utilisation, packet delivery and retransmission results require
-separate verification. Full testbed reproduction also requires additional
-configuration and execution details.
+AMF, SMF and UPF CPU averages and ICMP/UDP packet delivery have been
+verified against the preserved measurements. TCP retransmission totals
+have been recalculated, but their discrepancy with the manuscript remains
+unresolved. Full testbed reproduction requires additional validation.
+
+## Experimental traffic endpoints and topology
+
+The original iPerf3 JSON measurement records identify the following endpoints:
+
+| Parameter | Value |
+|---|---|
+| UE-side client IP | `10.0.0.2` |
+| iPerf3 server IP | `192.168.70.135` |
+| iPerf3 server port | `5201` |
+| Traffic direction | UE-side client to server |
+| TCP test duration | 20 seconds |
+| UDP test duration | 20 seconds |
+| UDP target bitrate | 10 Mbps |
+
+The current `oai-ext-dn` container has IP address `192.168.70.135` and gateway `192.168.70.129`, matching the server address in the original measurement records.
+
+Recovered Bash history includes the command `docker exec -it oai-ext-dn iperf3 -s`, indicating that an iPerf3 server was started inside the external data network container during testing. A host-based server command was also found.
+
+The available records strongly support `oai-ext-dn` as the intended server location, but do not conclusively establish the server process location during every original measurement.
+
+The recorded IP addresses describe the experimental environment and may need adjustment when reproducing the testbed on another host.
+
+### UE tunnel interface and routing
+
+The experimental latency measurements used the OAI NR UE tunnel interface `oaitun_ue1`.
+
+The recorded ping command was:
+
+```bash
+ping -I oaitun_ue1 -c 100 -i 0.2 -W 2 10.0.0.1
+```
+
+Five runs were performed for each network slice, with a five-second pause between runs.
+
+Recovered Bash history also contains the following routing commands:
+
+```bash
+ip route get 10.0.0.1
+sudo ip route add 10.0.0.1 dev oaitun_ue1
+```
+
+These commands show that routing was inspected and a manual route was added during testing. However, the available records do not confirm whether the manual route was active during the final measurements.
+
+The original iPerf3 records identify `10.0.0.2` as the client address and `192.168.70.135` as the server address.
+
+The complete routing table used during the original measurements was not preserved.
+
+Researchers reproducing the experiments should verify the UE tunnel address, routing table and end-to-end connectivity before collecting measurements.
+
+### Docker resource monitoring and sampling limitations
+
+Docker container CPU and memory utilisation were measured under baseline and active eMBB traffic conditions.
+
+The original measurements are preserved in:
+
+- `results/raw/resources/docker_baseline_raw.csv`
+- `results/raw/resources/docker_embb_traffic_raw.csv`
+
+Each file contains 30 observations per container, recording container name, CPU utilisation percentage and memory usage.
+
+Recovered Bash history confirms that Docker statistics were inspected using `docker stats`, including the `--no-stream` option.
+
+However, the original CSV files do not contain timestamps, and the exact sampling interval could not be independently recovered.
+
+Consequently, the reported CPU and memory averages are descriptive statistics of the recorded observations. No specific sampling frequency or time-series interpretation is claimed.
+
+### TCP retransmission verification
+
+The TCP retransmission values reported in the IMITEC 2026 manuscript do not fully agree with the totals obtained from the preserved iPerf3 JSON measurements.
+
+| Network slice | Manuscript retransmissions | Sum from preserved TCP JSON records |
+|---|---:|---:|
+| eMBB | 212 | 492 |
+| URLLC | 26 | 90 |
+| mMTC | 164 | 162 |
+
+The JSON totals were calculated across five TCP measurement runs per network slice.
+
+The original calculation method or source records supporting the manuscript values have not been independently established.
+
+These differences remain unresolved. The repository preserves the original measurement files without modifying their contents.
+
+Researchers should distinguish the manuscript values from the totals calculated using the preserved JSON records.
