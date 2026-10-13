@@ -4,7 +4,7 @@ Reproducibility materials for **Implementation and Experimental Evaluation of En
 
 ## Scope and limitations
 
-The experiment evaluates **three S-NSSAI configurations sequentially**, representing eMBB, URLLC and mMTC. It validates UE registration, PDU session establishment and IP connectivity, and measures RTT, TCP throughput, UDP jitter, loss, retransmissions and selected core resource usage. **It does not demonstrate concurrent slice isolation or differentiated QoS guarantees.**
+The experiment evaluates **three S-NSSAI configurations sequentially**, representing enhanced Mobile Broadband (eMBB), Ultra-Reliable Low-Latency Communications (URLLC), and massive Machine-Type Communications (mMTC). It validates UE registration, PDU session establishment, and IP connectivity, while measuring round-trip time (RTT), TCP throughput, UDP jitter, packet loss, TCP retransmissions, and selected 5G Core resource utilisation metrics. **Since the configurations were evaluated sequentially rather than concurrently, the experiment does not demonstrate concurrent network slice isolation or guaranteed QoS differentiation.**
 
 ## Reported environment
 
