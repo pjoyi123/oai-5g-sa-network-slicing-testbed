@@ -95,7 +95,7 @@ For replication, researchers should activate the required UE profile, verify reg
 
 ## Citation
 
-Joyi, P., Keetile, M., and Masonta, M. T., “Implementation and Experimental Evaluation of End-to-End 5G Standalone Network Slicing Using OpenAir-Interface,” (accepted for publication; bibliographic details pending).
+Joyi, P., Keetile, M., and Masonta, M. T., “Implementation and Experimental Evaluation of End-to-End 5G Standalone Network Slicing Using OpenAir-Interface,” (accepted for publication).
 
 ## Reproducing the experimental results
 
