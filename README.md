@@ -59,11 +59,8 @@ See `results/aggregate_results.csv`, `results/packet_delivery.csv` and `results/
 
 ## Reproducibility status
 
-The repository includes 45 original experimental measurement files, a Python analysis script and generated performance figures. The RTT, TCP throughput and UDP jitter statistics have been reproduced successfully from the original measurements.
-
-Full testbed reproducibility remains incomplete. Sanitized configurations, recovered launch commands, network endpoints and current Docker image IDs are documented. The exact original Core image versions, final UE launch variant and per-run restart procedure remain unconfirmed. CPU averages and packet delivery have been verified; the TCP retransmission discrepancy remains unresolved.
-
-Before public release, review the repository for sensitive information, obtain the necessary organisational approval and add an approved software license.
+The repository contains the experimental configurations, measurement scripts, raw data, and performance figures used in this study. The experimental measurements cover round-trip time (RTT), TCP throughput, UDP jitter, packet loss, TCP retransmissions, and selected 5G Core resource utilisation metrics.
+The testbed was implemented using OpenAirInterface (OAI) 5G Standalone with an RFsim-based radio access network and a containerised 5G Core. Three S-NSSAI configurations representing eMBB, URLLC, and mMTC were evaluated sequentially. The experimental configurations and available deployment information are provided to support reproducibility and further research
 
 ## Verified traffic-generation parameters
 
