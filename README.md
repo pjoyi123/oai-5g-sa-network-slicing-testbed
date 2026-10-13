@@ -1,6 +1,6 @@
 # OAI 5G SA S-NSSAI Experimental Testbed
 
-Reproducibility materials for **Implementation and Experimental Evaluation of End-to-End 5G Standalone Network Slicing Using OpenAir-Interface** (IMITEC 2026).
+Reproducibility materials for **Implementation and Experimental Evaluation of End-to-End 5G Standalone Network Slicing Using OpenAir-Interface**.
 
 ## Scope and limitations
 
@@ -95,7 +95,7 @@ For replication, researchers should activate the required UE profile, verify reg
 
 ## Citation
 
-Joyi, P., Keetile, M., and Masonta, M. T., “Implementation and Experimental Evaluation of End-to-End 5G Standalone Network Slicing Using OpenAir-Interface,” IMITEC 2026 (accepted; publication details to be confirmed).
+Joyi, P., Keetile, M., and Masonta, M. T., “Implementation and Experimental Evaluation of End-to-End 5G Standalone Network Slicing Using OpenAir-Interface,” (accepted for publication; bibliographic details pending).
 
 ## Reproducing the experimental results
 
@@ -231,7 +231,7 @@ Consequently, the reported CPU and memory averages are descriptive statistics of
 
 ### TCP retransmission verification
 
-The TCP retransmission values reported in the IMITEC 2026 manuscript do not fully agree with the totals obtained from the preserved iPerf3 JSON measurements.
+The TCP retransmission values reported in the manuscript do not fully agree with the totals obtained from the preserved iPerf3 JSON measurements.
 
 | Network slice | Manuscript retransmissions | Sum from preserved TCP JSON records |
 |---|---:|---:|

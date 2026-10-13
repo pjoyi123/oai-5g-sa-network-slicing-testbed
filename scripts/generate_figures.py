@@ -255,7 +255,7 @@ def process_metric(
 
 if __name__ == "__main__":
 
-    print("\nGenerating IMITEC 2026 figures...\n")
+    print("\nGenerating experimental figures...\n")
 
     process_metric(
         read_latency,

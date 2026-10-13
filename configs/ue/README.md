@@ -1,6 +1,6 @@
 # OAI NR UE configurations
 
-This directory contains sanitized NR UE configuration examples for the three network slice profiles evaluated in the IMITEC 2026 experiments.
+This directory contains sanitized NR UE configuration examples for the three network slice profiles evaluated in the experiments.
 
 ## Network slice profiles
 
